@@ -8,7 +8,9 @@ const app = express();
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://127.0.0.1:27017/GetSuperAI")
+  .connect(
+    "mongodb+srv://a2v10:GetSuperAi@cluster0.9rlv7un.mongodb.net/?retryWrites=true&w=majorityGetSuperAI"
+  )
   .then(() => {
     console.log("Connected to MongoDB");
   })
