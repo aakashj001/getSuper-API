@@ -9,7 +9,7 @@ const app = express();
 // Connect to MongoDB
 mongoose
   .connect(
-    "mongodb+srv://a2v10:GetSuperAi@cluster0.9rlv7un.mongodb.net/?retryWrites=true&w=majorityGetSuperAI"
+    "mongodb+srv://a2v10:GetSuperAi@cluster0.9rlv7un.mongodb.net/?retryWrites=true"
   )
   .then(() => {
     console.log("Connected to MongoDB");
@@ -35,7 +35,7 @@ passport.use(
       clientID:
         "998724752508-v80j6rb3ll5q0kjb7dgfg8p6i304076n.apps.googleusercontent.com",
       clientSecret: "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",
-      callbackURL: "http://localhost:8000/auth/google/redirect",
+      callbackURL: "https://get-super-api.onrender.com/auth/google/redirect",
     },
     async (accessToken, refreshToken, profile, cb) => {
       // Check if user already exists in database
