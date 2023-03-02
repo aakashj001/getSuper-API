@@ -144,12 +144,16 @@ app.post("/signup", async (req, res, next) => {
   // Save user to database
   try {
     await newUser.save();
+    // Generate JWT
+    const token = jwt.sign(newUser, "getSuperAI", {
+      expiresIn: "1h",
+    });
 
     // Log the user in and store their information in a session
     req.logIn(newUser, (err) => {
       if (err) return next(err);
       req.session.passport.user = { id: newUser.id, name: newUser.name };
-      res.status(201).json(newUser);
+      res.status(201).json(token);
     });
   } catch (err) {
     console.error(err);
