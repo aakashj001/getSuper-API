@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
   googleId: String,
   displayName: String,
   email: String,
+  registrationNumber: Number,
 });
 
 // Define user model
@@ -49,6 +50,7 @@ passport.use(
         googleId: profile.id,
         displayName: profile.displayName,
         email: profile.emails[0].value,
+        registrationNumber,
       });
       await newUser.save();
       cb(null, newUser);
@@ -114,12 +116,14 @@ app.post("/signup", async (req, res, next) => {
   // Hash password
   // const salt = await bcrypt.genSalt(10);
   // const hashedPassword = await bcrypt.hash(password, salt);
-
+  const count = await User.countDocuments();
+  const registrationNumber = count + 1;
   // Create new user
   const newUser = new User({
     name,
     email,
     password: password,
+    registrationNumber,
   });
 
   // Save user to database
