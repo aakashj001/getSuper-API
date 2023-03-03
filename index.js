@@ -45,7 +45,7 @@ passport.use(
         return cb(null, existingUser);
       }
       const count = await User.countDocuments();
-      const registrationNumber = count + 1;
+      const registrationNumber = count + 1015;
       // Create new user if not found in database
       const newUser = new User({
         googleId: profile.id,
