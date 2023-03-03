@@ -146,7 +146,7 @@ app.post("/signup", async (req, res, next) => {
   // const salt = await bcrypt.genSalt(10);
   // const hashedPassword = await bcrypt.hash(password, salt);
   const count = await User.countDocuments();
-  const registrationNumber = count + 1;
+  const registrationNumber = count + 1015;
   // Create new user
   const newUser = new User({
     name,
