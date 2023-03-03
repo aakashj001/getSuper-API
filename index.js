@@ -128,7 +128,7 @@ app.get(
     );
 
     // Redirect to frontend with token appended to URL
-    const redirectUrl = `https://getsuper.ai/waitlist/:token=${token}`;
+    const redirectUrl = `https://getsuper.ai/waitlist/?token=${token}`;
     res.redirect(redirectUrl);
   }
 );
