@@ -115,10 +115,24 @@ app.get(
   "/auth/google/redirect",
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req, res) => {
-    // Successful authentication, redirect to home page
-    res.redirect("/");
+    // Successful authentication, generate JWT
+    const token = jwt.sign(
+      {
+        email: req.user.email,
+        registrationNumber: req.user.registrationNumber,
+      },
+      "getSuperAI",
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    // Redirect to frontend with token appended to URL
+    const redirectUrl = `https://getsuper.ai/waitlist/:token=${token}`;
+    res.redirect(redirectUrl);
   }
 );
+
 app.post("/signup", async (req, res, next) => {
   const { name, email, password } = req.body;
 
