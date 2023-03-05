@@ -5,6 +5,10 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const jwt = require("jsonwebtoken");
 const app = express();
+const { EmailClient } = require("@azure/communication-email");
+
+const connectionString = `endpoint=https://super-ai-communication-service.communication.azure.com/;accesskey=lGYyqd0n7dXJe/jny3+BaCo7LfQeGMbjQNpA6S0Kdw3K9j1upfZcH7uBV/KqjfMBSitfie3I/jSdd7MKjJYEBg==`;
+const emailClient = new EmailClient(connectionString);
 
 // Connect to MongoDB
 mongoose
@@ -126,6 +130,7 @@ app.get(
         expiresIn: "1h",
       }
     );
+    sendRegistrationMail(req.user.email, req.user.registrationNumber);
 
     // Redirect to frontend with token appended to URL
     const redirectUrl = `https://getsuper.ai/waitlist/?token=${token}`;
@@ -158,6 +163,7 @@ app.post("/signup", async (req, res, next) => {
   // Save user to database
   try {
     await newUser.save();
+    sendRegistrationMail(newUser.email, newUser.registrationNumber);
 
     // Log the user in and store their information in a session
     req.logIn(newUser, (err) => {
@@ -181,6 +187,31 @@ app.post("/signup", async (req, res, next) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+async function sendRegistrationMail(receiversEmail, regNo) {
+  try {
+    // Send email code
+    emailMessage = {
+      sender: "DoNotReply@510c7a9e-c41a-456f-ae69-9a3de9b0954c.azurecomm.net",
+      content: {
+        subject: `Super Ai Waitlist Confirmation`,
+        // plainText: `${ConvertHtmlToPlaintext(emailBodyHtml)}`,
+        plainText: `You have sucessfully joined the Super AI Waitlist, Your registration no is #${regNo}`,
+      },
+      recipients: {
+        to: [
+          {
+            email: receiversEmail,
+            displayName: "",
+          },
+        ],
+      },
+    };
+    const response = await emailClient.send(emailMessage);
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 // Start server
 app.listen(8000, () => {
